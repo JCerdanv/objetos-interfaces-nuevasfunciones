@@ -9,7 +9,7 @@ const rl = readline.createInterface({ input, output });
 /* (dia 8) https://github.com/JCerdanv/objetos-interfaces-nuevasfunciones.git */
 
 const systemName: string = "LogSystem";
-const version: number = 11.5;
+const version: number = 11.6;
 const userName: string = "JCerdan";
 
 console.log( "============== f * f =================");
@@ -28,11 +28,13 @@ console.log(`Hola, ${answer}!`);
 
 let opcionJ: string = " ";
 
-// Se cambia el tipo de string[] a Tarea[]
+// cambio el tipo de string[] a Tarea[]
 let tareaJ: Tarea[] = []; 
 
-// Contador global para generar IDs únicos secuenciales
+// Contador agregar IDs únicos secuenciales
 let idContador: number = 1;
+
+/*
 
 do {
     console.log( "\n==F|       MENU DE TAREAS       |F==");
@@ -85,9 +87,7 @@ do {
       break;
 
     case "s":
-      console.log("Gracias por probar la nueva App... vuelve pronto!");
-      " v" + ${version};
-      (` "Gracias por probar la nueva App " v" + ${version}... vuelve pronto!" `); 
+      console.log(` "Gracias por probar la nueva App v${version}... vuelve pronto!" `); 
       break;
 
     default:
@@ -97,5 +97,84 @@ do {
 
 } while (opcionJ.trim().toLowerCase() !== "s");
 
+*/
+
+
+// === funciones Arrow para cada opcion ===
+
+const addTask = (title: string): void => {
+  if (title.trim() !== "") { 
+    const objetoTarea: Tarea = { 
+      id: idContador, 
+      title: title.trim(), 
+      completed: false 
+    }; 
+    tareaJ.push(objetoTarea); 
+    console.log(` Tarea "[ID: ${idContador}] ${title}" se agregó.`); 
+    idContador++; 
+  } else { 
+    console.log(" El titulo de la tarea no debe estar vacio."); 
+  }
+};
+
+const removeTask = (): void => {
+  if (tareaJ.length > 0) { 
+    const eliminada = tareaJ.pop(); 
+    console.log(` Se eliminó la última tarea: "${eliminada?.title}"`); 
+  } else { 
+    console.log(" No hay tareas en lista por eliminar."); 
+  }
+};
+
+const listTasks = (): void => {
+  console.log("\n->>>  LISTA  DE  TAREAS  <<<-"); 
+  if (tareaJ.length === 0) { 
+    console.log("No hay tareas registradas."); 
+  } else { 
+    for (let i = 0; i < tareaJ.length; i++) { 
+      const estado = tareaJ[i].completed ? "completed" : "pending";
+      console.log(`[${tareaJ[i].id}] ${tareaJ[i].title} - ${estado}`); 
+    } 
+  } 
+};
+
+// === menú de tareras ===
+
+do {
+    console.log( "\n==F|       MENU DE TAREAS       |F==");
+    console.log( "     a  =  Agregar nueva tarea a lista  ===");
+    console.log( "     e  =  Eliminar ultima tarea de lista ===");
+    console.log( "     l  =  Lista de todas tareas ===");
+    console.log( "     s  =  Salir del menu  ===");
+  
+    opcionJ = await rl.question("Elija una letra: "); 
+  
+    switch (opcionJ.trim().toLowerCase()) { 
+    case "a": 
+      const nuevaTarea = await rl.question("Ingresa el título de la tarea: "); 
+      addTask(nuevaTarea);
+      break; 
+      
+    case "e": 
+      removeTask();
+      break; 
+      
+    case "l": 
+      listTasks();
+      break; 
+      
+    case "s": 
+      console.log(` "Gracias por probar la nueva App v${version}... vuelve pronto!" `); 
+      break; 
+      
+    default: 
+      console.log(`${answer}, por favor, debes usar las opciones sugeridas\n`); 
+      break; 
+    } 
+} while (opcionJ.trim().toLowerCase() !== "s"); 
+
+
+
 // 🚫 No eliminar las líneas de abajo ⬇️
 rl.close();
+
